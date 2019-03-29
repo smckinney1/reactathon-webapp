@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useReducer, useState } from "react"
 import { Box, Paragraph, Heading, Input, Flex, Button, styled } from "reakit"
 import { theme } from "styled-tools"
 import posed, { PoseGroup } from "react-pose"
@@ -45,8 +45,9 @@ const ListItem = ({ itemName, done }) => (
   </Item>
 );
 
-const NewItem = () => {
+const NewItem = ({ dispatch }) => {
   /*
+  * 3/29/19
   * Hooks take initial state as argument.
   * They return the name of the item in state,
   * as well as an updater function to handle changes to state.
@@ -55,6 +56,11 @@ const NewItem = () => {
 
   const handleChange = e => setItem(e.target.value)
 
+  const addItem = () => {
+    dispatch({ type: 'addItem', itemName });
+    setItem('');
+  }
+
   return (
     <Flex>
       <Input
@@ -62,16 +68,30 @@ const NewItem = () => {
         onChange={handleChange}
         onKeyPress={handleChange}
         placeholder="What do you need to buy?" />
-      <Button>Add</Button>
+      <Button onClick={addItem}>Add</Button>
     </Flex>
   );
 };
 
-const GroceryList = ({ listId }) => {
-  const groceryList = [
-    { itemName: 'pizza', done: true, key: 'temp1' },
-    { itemName: 'beer', done: false, key: 'temp2' },
-  ];
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'addItem':
+      return [
+        ...state,
+        {
+          itemName: action.itemName,
+          key: new Date().toISOString(),
+        }
+      ];
+    default:
+      throw Error('Unknown action')
+  }
+}
+
+const GroceryList = ({ listId, initialState }) => {
+  const [listName, setListName] = useState(initialState.listName);
+  const [groceryList, dispatch] = useReducer(reducer, initialState.groceryList);
+
   let content;
 
   if (!groceryList.length) {
@@ -88,9 +108,13 @@ const GroceryList = ({ listId }) => {
 
   return (
     <Box>
-      <TitleInput value="Workshop Party" placeholder="Give your list a name" />
+      <TitleInput
+        value={listName}
+        onChange={e => setListName(e.target.value)}
+        placeholder="Give your list a name"
+      />
       {content}
-      <NewItem />
+      <NewItem dispatch={dispatch} />
     </Box>
   )
 }

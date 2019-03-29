@@ -7,7 +7,16 @@ import GroceryList from '../components/GroceryList'
 const IndexPage = () => (
   <Layout>
     <SEO title="🛒" keywords={[`gatsby`, `application`, `react`]} />
-    <GroceryList listId="workshopList" />
+    <GroceryList
+      listId="workshopList"
+      initialState={{
+        listName: 'Workshop',
+        groceryList: [
+          { itemName: 'pizza', done: true, key: 'temp1' },
+          { itemName: 'beer', done: false, key: 'temp2' },
+        ]
+      }}
+    />
   </Layout>
 )
 

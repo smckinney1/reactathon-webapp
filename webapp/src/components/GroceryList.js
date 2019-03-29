@@ -37,13 +37,27 @@ const Strike = styled.span`
   }
 `
 
-const ListItem = ({ itemName, done }) => (
-  <Item justifyContent="space-between">
-    <ItemName as="span">
-      {done ? <Strike>{itemName}</Strike> : itemName}
-    </ItemName>
-  </Item>
-);
+// TODO: dispatch the action that toggles done action
+const ListItem = ({ itemName }) => {
+  const [isDone, dispatch] = useReducer(reducer, false);
+
+  const toggleDone = () => {
+    dispatch({ type: 'toggleDone', isDone });
+  }
+
+  return (
+    <Item justifyContent="space-between">
+      <ItemName as="span">
+        {isDone ? <Strike>{itemName}</Strike> : itemName}
+      </ItemName>
+      <span
+        role="img"
+        aria-label="Mark done"
+        onClick={() => toggleDone(true)}
+      >✅</span>
+    </Item>
+  );
+};
 
 const NewItem = ({ dispatch }) => {
   /*
@@ -73,6 +87,8 @@ const NewItem = ({ dispatch }) => {
   );
 };
 
+// TODO: add toggleDone action to change the done prop on an item
+// TODO: use index to identify which item you're changing
 const reducer = (state, action) => {
   switch (action.type) {
     case 'addItem':
@@ -83,6 +99,13 @@ const reducer = (state, action) => {
           key: new Date().toISOString(),
         }
       ];
+      case 'toggleDone':
+        return [
+          ...state,
+          {
+            isDone: action.isDone
+          }
+        ];
     default:
       throw Error('Unknown action')
   }
@@ -100,7 +123,8 @@ const GroceryList = ({ listId, initialState }) => {
     content = groceryList.map((item, index) => (
       <ListItem
         key={item.key}
-        done={item.done}
+        index={item.index}
+        isDone={item.isDone}
         itemName={item.itemName}
       />
     ));

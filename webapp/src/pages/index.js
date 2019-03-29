@@ -12,8 +12,8 @@ const IndexPage = () => (
       initialState={{
         listName: 'Workshop',
         groceryList: [
-          { itemName: 'pizza', done: true, key: 'temp1' },
-          { itemName: 'beer', done: false, key: 'temp2' },
+          { itemName: 'pizza', isDone: false, key: 'temp1' },
+          { itemName: 'beer', isDone: false, key: 'temp2' },
         ]
       }}
     />

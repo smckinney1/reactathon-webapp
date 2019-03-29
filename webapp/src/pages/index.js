@@ -6,7 +6,7 @@ import GroceryList from '../components/GroceryList'
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Shopping" keywords={[`gatsby`, `application`, `react`]} />
+    <SEO title="🛒" keywords={[`gatsby`, `application`, `react`]} />
     <GroceryList listId="workshopList" />
   </Layout>
 )

@@ -37,15 +37,52 @@ const Strike = styled.span`
   }
 `
 
+const ListItem = ({ itemName, done }) => (
+  <Item justifyContent="space-between">
+    <ItemName as="span">
+      {done ? <Strike>{itemName}</Strike> : itemName}
+    </ItemName>
+  </Item>
+);
+
+const NewItem = () => {
+  // useState to keep state of the new item in input
+  return (
+    <Flex>
+      <Input
+        value={'do'}
+        onChange={() => console.log('test')}
+        onKeyPress={() => console.log('test')}
+        placeholder="What do you need to buy?" />
+      <Button>Add</Button>
+    </Flex>
+  );
+};
+
 const GroceryList = ({ listId }) => {
-  const groceries = []
+  const groceryList = [
+    { itemName: 'pizza', done: true, key: 'temp1' },
+    { itemName: 'beer', done: false, key: 'temp2' },
+  ];
+  let content;
+
+  if (!groceryList.length) {
+    content = <Paragraph>Add some groceries to your list below.👇</Paragraph>
+  } else {
+    content = groceryList.map((item, index) => (
+      <ListItem
+        key={item.key}
+        done={item.done}
+        itemName={item.itemName}
+      />
+    ));
+  }
 
   return (
     <Box>
       <TitleInput value="Workshop Party" placeholder="Give your list a name" />
-      {/* Render a Paragraph if groceries is empty */}
-      {/* Loop through groceries and render a ListItem component for each */}
-      {/* ListItem should take props { itemName, done }; render itemName with Strike when th eitem is done */}
+      {content}
+      <NewItem />
     </Box>
   )
 }

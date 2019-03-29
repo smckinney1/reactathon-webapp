@@ -37,24 +37,15 @@ const Strike = styled.span`
   }
 `
 
-// TODO: dispatch the action that toggles done action
-const ListItem = ({ itemName }) => {
-  const [isDone, dispatch] = useReducer(reducer, false);
-
-  const toggleDone = () => {
-    dispatch({ type: 'toggleDone', isDone });
-  }
-
+const ListItem = ({ itemName, isDone, dispatch, index }) => {
   return (
     <Item justifyContent="space-between">
-      <ItemName as="span">
+      <ItemName as="span" onClick={() => dispatch({ type: "toggleDone", index })}>
         {isDone ? <Strike>{itemName}</Strike> : itemName}
       </ItemName>
-      <span
-        role="img"
-        aria-label="Mark done"
-        onClick={() => toggleDone(true)}
-      >✅</span>
+      <Button opaque={false} onClick={() => dispatch({ type: "remove", index })}>
+        ❌
+      </Button>
     </Item>
   );
 };
@@ -87,9 +78,9 @@ const NewItem = ({ dispatch }) => {
   );
 };
 
-// TODO: add toggleDone action to change the done prop on an item
-// TODO: use index to identify which item you're changing
 const reducer = (state, action) => {
+  const { index } = action;
+
   switch (action.type) {
     case 'addItem':
       return [
@@ -99,13 +90,15 @@ const reducer = (state, action) => {
           key: new Date().toISOString(),
         }
       ];
+      // TODO: is the slicing the best, cleanest solution? (toggleDone, remove copied from instructor code)
       case 'toggleDone':
         return [
-          ...state,
-          {
-            isDone: action.isDone
-          }
+          ...state.slice(0, index),
+          { ...state[index], isDone: !state[index].isDone },
+          ...state.slice(index + 1),
         ];
+      case "remove":
+        return [...state.slice(0, index), ...state.slice(index + 1)]
     default:
       throw Error('Unknown action')
   }
@@ -122,10 +115,10 @@ const GroceryList = ({ listId, initialState }) => {
   } else {
     content = groceryList.map((item, index) => (
       <ListItem
+        {...item}
+        index={index}
         key={item.key}
-        index={item.index}
-        isDone={item.isDone}
-        itemName={item.itemName}
+        dispatch={dispatch}
       />
     ));
   }

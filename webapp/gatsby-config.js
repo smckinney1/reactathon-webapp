@@ -1,7 +1,14 @@
+/*********************************************************************************
+ * WORKSHOP 03/29/2019 at Reactathon SF
+ *
+ * The site metadata will be accessible through GraphQL automatically.
+ * For example, the "title" property will become our site title in layout.js.
+*********************************************************************************/
+
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `Shared Grocery List`,
+    description: `App created during Create a Modern Web App with React workshop on March 23, 2019.`,
     author: `@gatsbyjs`,
   },
   plugins: [

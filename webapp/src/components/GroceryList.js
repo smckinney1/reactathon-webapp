@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, Paragraph, Heading, Input, Flex, Button, styled } from "reakit"
 import { theme } from "styled-tools"
 import posed, { PoseGroup } from "react-pose"
@@ -46,13 +46,21 @@ const ListItem = ({ itemName, done }) => (
 );
 
 const NewItem = () => {
-  // useState to keep state of the new item in input
+  /*
+  * Hooks take initial state as argument.
+  * They return the name of the item in state,
+  * as well as an updater function to handle changes to state.
+  */
+  const [itemName, setItem] = useState('');
+
+  const handleChange = e => setItem(e.target.value)
+
   return (
     <Flex>
       <Input
-        value={'do'}
-        onChange={() => console.log('test')}
-        onKeyPress={() => console.log('test')}
+        value={itemName}
+        onChange={handleChange}
+        onKeyPress={handleChange}
         placeholder="What do you need to buy?" />
       <Button>Add</Button>
     </Flex>

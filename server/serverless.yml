@@ -1,0 +1,24 @@
+service: grocerylist-workshop-api
+
+# Note that default region is N. Virginia, & lambda functions will probably show up there
+provider:
+  name: aws
+  # latest version of Node supported by AWS
+  runtime: nodejs8.10
+
+functions:
+  hello:
+    handler: hello.world
+    events:
+      - http:
+          path: hello
+          method: get
+  query:
+    handler: handler.query
+    events:
+      - http:
+          path: query
+          method: get
+      - http:
+          path: query
+          method: post
